@@ -1,0 +1,11 @@
+C:\Users\mlafontaine\Documents\Visual Studio 2017\Projects\MediatRMiddlewareTest\MediatRMiddlewareTest\bin\Debug\netcoreapp2.0\MediatRMiddlewareTest.deps.json
+C:\Users\mlafontaine\Documents\Visual Studio 2017\Projects\MediatRMiddlewareTest\MediatRMiddlewareTest\bin\Debug\netcoreapp2.0\MediatRMiddlewareTest.runtimeconfig.json
+C:\Users\mlafontaine\Documents\Visual Studio 2017\Projects\MediatRMiddlewareTest\MediatRMiddlewareTest\bin\Debug\netcoreapp2.0\MediatRMiddlewareTest.runtimeconfig.dev.json
+C:\Users\mlafontaine\Documents\Visual Studio 2017\Projects\MediatRMiddlewareTest\MediatRMiddlewareTest\bin\Debug\netcoreapp2.0\MediatRMiddlewareTest.dll
+C:\Users\mlafontaine\Documents\Visual Studio 2017\Projects\MediatRMiddlewareTest\MediatRMiddlewareTest\bin\Debug\netcoreapp2.0\MediatRMiddlewareTest.pdb
+C:\Users\mlafontaine\Documents\Visual Studio 2017\Projects\MediatRMiddlewareTest\MediatRMiddlewareTest\obj\Debug\netcoreapp2.0\MediatRMiddlewareTest.csprojResolveAssemblyReference.cache
+C:\Users\mlafontaine\Documents\Visual Studio 2017\Projects\MediatRMiddlewareTest\MediatRMiddlewareTest\obj\Debug\netcoreapp2.0\MediatRMiddlewareTest.csproj.CoreCompileInputs.cache
+C:\Users\mlafontaine\Documents\Visual Studio 2017\Projects\MediatRMiddlewareTest\MediatRMiddlewareTest\obj\Debug\netcoreapp2.0\MediatRMiddlewareTest.AssemblyInfoInputs.cache
+C:\Users\mlafontaine\Documents\Visual Studio 2017\Projects\MediatRMiddlewareTest\MediatRMiddlewareTest\obj\Debug\netcoreapp2.0\MediatRMiddlewareTest.AssemblyInfo.cs
+C:\Users\mlafontaine\Documents\Visual Studio 2017\Projects\MediatRMiddlewareTest\MediatRMiddlewareTest\obj\Debug\netcoreapp2.0\MediatRMiddlewareTest.dll
+C:\Users\mlafontaine\Documents\Visual Studio 2017\Projects\MediatRMiddlewareTest\MediatRMiddlewareTest\obj\Debug\netcoreapp2.0\MediatRMiddlewareTest.pdb
