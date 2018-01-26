@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="AddUserCommand.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -18,6 +14,7 @@
     <PackageReference Include="MediatR" Version="4.0.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="4.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="1.1.0" />
@@ -27,7 +24,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="AddUserCommand.ts" />
+    <None Update="AddUserCommand.ts">
+      <CustomToolNamespace>Commands\AddUserCommand.cs</CustomToolNamespace>
+    </None>
+    <None Update="RefreshTokenCommand.ts">
+      <CustomToolNamespace>Commands\RefreshTokenCommand.cs</CustomToolNamespace>
+    </None>
+    <None Update="RequestTokenCommand.ts">
+      <CustomToolNamespace>Commands\RequestTokenCommand.cs</CustomToolNamespace>
+    </None>
   </ItemGroup>
 
 </Project>

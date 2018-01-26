@@ -12905,6 +12905,7 @@
       "MediatR >= 4.0.1",
       "MediatR.Extensions.Microsoft.DependencyInjection >= 4.0.0",
       "Microsoft.AspNetCore.All >= 2.0.5",
+      "Microsoft.AspNetCore.Mvc.Core >= 2.0.2",
       "Microsoft.NETCore.App >= 2.0.0",
       "Newtonsoft.Json >= 10.0.3",
       "Newtonsoft.Json.Schema >= 3.0.5",
@@ -12973,6 +12974,10 @@
           "Microsoft.AspNetCore.All": {
             "target": "Package",
             "version": "[2.0.5, )"
+          },
+          "Microsoft.AspNetCore.Mvc.Core": {
+            "target": "Package",
+            "version": "[2.0.2, )"
           },
           "Microsoft.NETCore.App": {
             "target": "Package",

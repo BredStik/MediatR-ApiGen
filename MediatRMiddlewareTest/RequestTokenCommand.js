@@ -5,17 +5,15 @@ var MediatRMiddlewareTest;
     // template: The template to repeat for each matched item
     // separator (optional): A separator template that is placed between all templates e.g. $Properties[public $name: $Type][, ]
     // More info: http://frhagn.github.io/Typewriter/
-    var AddUserCommand = /** @class */ (function () {
-        function AddUserCommand() {
-            // NAME
-            this.name = null;
-            // AGE
-            this.age = 0;
-            // ID
-            this.id = "00000000-0000-0000-0000-000000000000";
+    var RequestTokenCommand = /** @class */ (function () {
+        function RequestTokenCommand() {
+            // USERNAME
+            this.username = null;
+            // PASSWORD
+            this.password = null;
         }
-        return AddUserCommand;
+        return RequestTokenCommand;
     }());
-    MediatRMiddlewareTest.AddUserCommand = AddUserCommand;
+    MediatRMiddlewareTest.RequestTokenCommand = RequestTokenCommand;
 })(MediatRMiddlewareTest || (MediatRMiddlewareTest = {}));
-//# sourceMappingURL=AddUserCommand.js.map
+//# sourceMappingURL=RequestTokenCommand.js.map

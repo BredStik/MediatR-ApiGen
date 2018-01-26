@@ -39,7 +39,7 @@ namespace MediatRMiddlewareTest
             doc.info = new ExpandoObject();
             doc.info.title = assembly.GetName().Name;
             doc.info.version = "1.0.0";
-            doc.host = "localhost:56176/";// context.Session..Request..Request..RequestUri.Authority;
+            doc.host = "localhost:5000/";// context.Session..Request..Request..RequestUri.Authority;
             doc.basePath = "/";
             doc.schemes = new[] { "https" };
             if (doc.host.Contains("127.0.0.1") || doc.host.Contains("localhost"))
@@ -48,7 +48,7 @@ namespace MediatRMiddlewareTest
             }
             doc.definitions = new ExpandoObject();
             doc.paths = GeneratePaths(assembly, doc);
-            //doc.securityDefinitions = GenerateSecurityDefinitions();
+            doc.securityDefinitions = GenerateSecurityDefinitions();
 
             var swaggerJson = (string)JsonConvert.SerializeObject(doc);
 
@@ -59,10 +59,12 @@ namespace MediatRMiddlewareTest
         private static dynamic GenerateSecurityDefinitions()
         {
             dynamic securityDefinitions = new ExpandoObject();
-            securityDefinitions.apikeyQuery = new ExpandoObject();
-            securityDefinitions.apikeyQuery.type = "apiKey";
-            securityDefinitions.apikeyQuery.name = "code";
-            securityDefinitions.apikeyQuery.@in = "query";
+            securityDefinitions.basic = new ExpandoObject();
+            securityDefinitions.basic.type = "basic";
+            //securityDefinitions.apikeyQuery = new ExpandoObject();
+            //securityDefinitions.apikeyQuery.type = "apiKey";
+            //securityDefinitions.apikeyQuery.name = "code";
+            //securityDefinitions.apikeyQuery.@in = "query";
 
             // Microsoft Flow import doesn't like two apiKey options, so we leave one out.
 
@@ -98,7 +100,7 @@ namespace MediatRMiddlewareTest
 
                 operation.responses = GenerateResponseParameterSignature(requestType, doc);
                 dynamic keyQuery = new ExpandoObject();
-                keyQuery.apikeyQuery = new string[0];
+                keyQuery.basic = new string[0];
                 operation.security = new ExpandoObject[] { keyQuery };
 
                 AddToExpando(path, verb, operation);

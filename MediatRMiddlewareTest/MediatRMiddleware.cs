@@ -79,8 +79,31 @@ namespace MediatRMiddlewareTest
                 await _next.Invoke(context);
                 return;
             }
-            
-            await requestRoutes[matchingRoute](context, _mediator, values).ConfigureAwait(false);
+
+            try
+            {
+                await requestRoutes[matchingRoute](context, _mediator, values).ConfigureAwait(false);
+            }
+            catch(ApplicationException exc)
+            {
+                var exceptionHandlingDictionary = new Dictionary<Type, Action<HttpContext>>
+                {
+                    { typeof(UnauthorizedAccessException), async (ctx) => { ctx.Response.StatusCode = 401; await ctx.Response.WriteAsync("Invalid or missing credentials").ConfigureAwait(false); } },
+                    { typeof(ApplicationException), async (ctx) => { ctx.Response.StatusCode = 500; await ctx.Response.WriteAsync("Unknown server error").ConfigureAwait(false); } }
+                };
+
+
+                if(exceptionHandlingDictionary.ContainsKey(exc.GetType()))
+                {
+                    exceptionHandlingDictionary[exc.GetType()](context);
+                }
+                else
+                {
+                    exceptionHandlingDictionary[typeof(ApplicationException)](context);
+                }
+
+                return;
+            }
 
             if(context.Response.HasStarted)
             {

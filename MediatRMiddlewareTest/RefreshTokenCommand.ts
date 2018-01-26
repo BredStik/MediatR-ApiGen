@@ -9,13 +9,7 @@ module MediatRMiddlewareTest {
     // More info: http://frhagn.github.io/Typewriter/
 
     
-    export class AddUserCommand {
+    export class RefreshTokenCommand {
         
-        // NAME
-        public name: string = null;
-        // AGE
-        public age: number = 0;
-        // ID
-        public id: string = "00000000-0000-0000-0000-000000000000";
     }
 }
