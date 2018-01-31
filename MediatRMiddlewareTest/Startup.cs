@@ -10,10 +10,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace MediatRMiddlewareTest
 {
@@ -24,8 +26,13 @@ namespace MediatRMiddlewareTest
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                //.AddCookie(options => {
+                //    options.SlidingExpiration = true;
+                //    options.LoginPath
+                //})
                 .AddJwtBearer(options =>
                 {
+                    options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
@@ -39,6 +46,8 @@ namespace MediatRMiddlewareTest
                 });
 
 
+            services.AddRouting();
+
             services.AddMvcCore()
                 .AddApiExplorer()
                 .AddJsonFormatters()
@@ -49,6 +58,7 @@ namespace MediatRMiddlewareTest
             services.AddSwaggerGen(c =>
             {
                 //c..SwaggerDoc("v1", new Info { Title = "Contacts API", Version = "v1" });
+                //c.AddSecurityDefinition("bearer", new BasicAuthScheme());                
             });
 
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));
@@ -65,14 +75,20 @@ namespace MediatRMiddlewareTest
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
+            app.UseStaticFiles();
             app.UseMiddleware<SwaggerDefinitionMiddleware>();
             app.UseSwagger();
-            app.UseSwaggerUI(opt => opt.SwaggerEndpoint("/api/swagger", "Mediatr API"));
+            app.UseSwaggerUI(opt => { opt.SwaggerEndpoint("/api/swagger", "Mediatr API"); opt.InjectOnCompleteJavaScript("js/CustomSwagger.js"); });
             app.UseAuthentication();
-            app.UseMediatRMiddleware();
 
-            
+
+            var routeBuilder = new RouteBuilder(app);
+
+
+            //app.UseMediatRMiddleware(routeBuilder);
+            app.ConfigureMediatRRoutes(routeBuilder);
+            app.UseRouter(routeBuilder.Build());
             app.UseMvc();
         }
     }

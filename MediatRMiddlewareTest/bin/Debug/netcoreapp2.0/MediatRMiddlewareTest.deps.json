@@ -28,6 +28,7 @@
           "MediatR.Extensions.Microsoft.DependencyInjection": "4.0.0",
           "Microsoft.AspNetCore.All": "2.0.5",
           "Microsoft.AspNetCore.Mvc.Core": "2.0.2",
+          "Microsoft.AspNetCore.Routing": "2.0.1",
           "Microsoft.NETCore.App": "2.0.0",
           "Newtonsoft.Json": "10.0.3",
           "Newtonsoft.Json.Schema": "3.0.5",

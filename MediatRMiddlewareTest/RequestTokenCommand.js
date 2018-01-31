@@ -11,6 +11,8 @@ var MediatRMiddlewareTest;
             this.username = null;
             // PASSWORD
             this.password = null;
+            // GRANT_TYPE
+            this.grant_Type = null;
         }
         return RequestTokenCommand;
     }());

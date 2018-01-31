@@ -2,10 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediatRMiddlewareTest.Commands
 {
+    //[Authorize()]
     [Route("api/commands/addUser/{Id}", "POST")]
     public class AddUserCommand: IRequest<string>
     {

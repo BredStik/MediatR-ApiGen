@@ -62,7 +62,7 @@ namespace MediatRMiddlewareTest
             })
         );
 
-        public MediatRMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IMediator mediator)
+        public MediatRMiddleware(RequestDelegate next, IRouteBuilder routeBuilder, ILoggerFactory loggerFactory, IMediator mediator)
         {
             _next = next;
             _logger = loggerFactory.CreateLogger<MediatRMiddleware>();
@@ -116,9 +116,59 @@ namespace MediatRMiddlewareTest
 
     public static class MediatRMiddlewareExtensions
     {
-        public static IApplicationBuilder UseMediatRMiddleware(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseMediatRMiddleware(this IApplicationBuilder builder, IRouteBuilder routeBuilder)
         {
-            return builder.UseMiddleware<MediatRMiddleware>();
+            return builder.UseMiddleware<MediatRMiddleware>(routeBuilder);
+        }
+
+        public static IApplicationBuilder ConfigureMediatRRoutes(this IApplicationBuilder builder, IRouteBuilder routeBuilder)
+        {
+            var routeAttributes = Assembly.GetAssembly(typeof(MediatRMiddleware)).GetTypes().Where(t => t.GetCustomAttribute<RouteAttribute>() != null).Select(t => new { Type = t, RouteAttribute = t.GetCustomAttribute<RouteAttribute>() });
+
+            foreach (var routeAttribute in routeAttributes)
+            {
+                routeBuilder.MapVerb(routeAttribute.RouteAttribute.HttpMethod, routeAttribute.RouteAttribute.Route, async (request, response, routeData) => {
+                    var mediator = request.HttpContext.RequestServices.GetService(typeof(IMediator)) as IMediator;
+
+                    dynamic mediatrRequest = JsonConvert.DeserializeObject(await new StreamReader(request.Body).ReadToEndAsync().ConfigureAwait(false), routeAttribute.Type);
+
+                    if (mediatrRequest == null)
+                    {
+                        mediatrRequest = Activator.CreateInstance(routeAttribute.Type);
+                    }
+                    
+                    if (request.Query.Any())
+                    {
+                        foreach (var queryString in request.Query)
+                        {
+                            var prop = routeAttribute.Type.GetProperties().FirstOrDefault(x => x.Name.Equals(queryString.Key, StringComparison.InvariantCultureIgnoreCase));
+
+                            prop?.SetValue(mediatrRequest, JsonConvert.DeserializeObject(JsonConvert.SerializeObject(queryString.Value.FirstOrDefault()), prop.PropertyType));
+                        }
+                    }
+
+                    if (routeData.Values.Any())
+                    {
+                        //see if matching property
+                        foreach (var value in routeData.Values)
+                        {
+                            var prop = routeAttribute.Type.GetProperties().FirstOrDefault(x => x.Name.Equals(value.Key, StringComparison.InvariantCultureIgnoreCase));
+
+                            prop?.SetValue(mediatrRequest, JsonConvert.DeserializeObject(JsonConvert.SerializeObject(value.Value), prop.PropertyType));
+                        }
+                    }
+                                        
+
+                    var mediatorResponse = await mediator.Send(mediatrRequest).ConfigureAwait(false);
+                    string jsonResponse = JsonConvert.SerializeObject(mediatorResponse);
+
+                    response.ContentType = "application/json";
+
+                    await response.WriteAsync(jsonResponse).ConfigureAwait(false);
+                });
+            }
+
+            return builder;
         }
     }
 

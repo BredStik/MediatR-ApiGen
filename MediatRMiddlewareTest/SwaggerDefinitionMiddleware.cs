@@ -48,7 +48,7 @@ namespace MediatRMiddlewareTest
             }
             doc.definitions = new ExpandoObject();
             doc.paths = GeneratePaths(assembly, doc);
-            doc.securityDefinitions = GenerateSecurityDefinitions();
+            doc.securityDefinitions = GenerateSecurityDefinitionsForApiKey();// GenerateSecurityDefinitions();
 
             var swaggerJson = (string)JsonConvert.SerializeObject(doc);
 
@@ -61,6 +61,38 @@ namespace MediatRMiddlewareTest
             dynamic securityDefinitions = new ExpandoObject();
             securityDefinitions.basic = new ExpandoObject();
             securityDefinitions.basic.type = "basic";
+            //securityDefinitions.apikeyQuery = new ExpandoObject();
+            //securityDefinitions.apikeyQuery.type = "apiKey";
+            //securityDefinitions.apikeyQuery.name = "code";
+            //securityDefinitions.apikeyQuery.@in = "query";
+
+            // Microsoft Flow import doesn't like two apiKey options, so we leave one out.
+
+            //securityDefinitions.apikeyHeader = new ExpandoObject();
+            //securityDefinitions.apikeyHeader.type = "apiKey";
+            //securityDefinitions.apikeyHeader.name = "x-functions-key";
+            //securityDefinitions.apikeyHeader.@in = "header";
+            return securityDefinitions;
+        }
+
+        private static dynamic GenerateSecurityDefinitionsForApiKey()
+        {
+            dynamic securityDefinitions = new ExpandoObject();
+            securityDefinitions.apiKey = new ExpandoObject();
+            securityDefinitions.apiKey.type = "apiKey";
+            securityDefinitions.apiKey.name = "Authorization";
+            securityDefinitions.apiKey.@in = "header";
+
+            return securityDefinitions;
+        }
+
+        private static dynamic GenerateSecurityDefinitionsForBearerAuth()
+        {
+            dynamic securityDefinitions = new ExpandoObject();
+            securityDefinitions.bearerAuth = new ExpandoObject();
+            securityDefinitions.bearerAuth.type = "http";
+            securityDefinitions.bearerAuth.scheme = "bearer";
+            securityDefinitions.bearerAuth.bearerFormat = "JWT";
             //securityDefinitions.apikeyQuery = new ExpandoObject();
             //securityDefinitions.apikeyQuery.type = "apiKey";
             //securityDefinitions.apikeyQuery.name = "code";
@@ -91,16 +123,18 @@ namespace MediatRMiddlewareTest
                 operation.operationId = mediatrRequests[requestType].Route + ToTitleCase(verb); //ToTitleCase(functionAttr.Name) + ToTitleCase(verb);
                 operation.produces = new[] { "application/json" };
                 operation.consumes = new[] { "application/json" };
-                operation.parameters = GenerateRequestParametersSignature(requestType, mediatrRequests[requestType].Route, doc);
+                operation.parameters = GenerateRequestParametersSignature(requestType, mediatrRequests[requestType].HttpMethod, mediatrRequests[requestType].Route, doc);
+
+                operation.tags = new string[] { GetTag(requestType) };
 
                 // Summary is title
-                operation.summary = "Request name";//GetFunctionName(methodInfo, functionAttr.Name);
+                operation.summary = requestType.Name;// "Request name";//GetFunctionName(methodInfo, functionAttr.Name);
                 // Verbose description
                 operation.description = "Request description";// GetFunctionDescription(methodInfo, functionAttr.Name);
 
                 operation.responses = GenerateResponseParameterSignature(requestType, doc);
                 dynamic keyQuery = new ExpandoObject();
-                keyQuery.basic = new string[0];
+                keyQuery.apiKey = new string[0];
                 operation.security = new ExpandoObject[] { keyQuery };
 
                 AddToExpando(path, verb, operation);
@@ -110,7 +144,10 @@ namespace MediatRMiddlewareTest
             return paths;
         }
 
-           
+        private static string GetTag(Type requestType)
+        {
+            return requestType.Namespace;
+        }
 
         private static string GetFunctionDescription(MethodInfo methodInfo, string funcName)
         {
@@ -198,7 +235,7 @@ namespace MediatRMiddlewareTest
             return responses;
         }
 
-        private static List<object> GenerateRequestParametersSignature(Type requestType, string route, dynamic doc)
+        private static List<object> GenerateRequestParametersSignature(Type requestType, string httpMethod, string route, dynamic doc)
         {
             var parameterSignatures = new List<object>();
 
@@ -206,11 +243,11 @@ namespace MediatRMiddlewareTest
 
             foreach (var parameter in requestType.GetProperties())
             {
-                if (route.Contains($"{{{parameter.Name}}}"))
+                if (route.Contains($"{{{parameter.Name}}}") || httpMethod.Equals(HttpMethods.Get, StringComparison.InvariantCultureIgnoreCase))
                 {
                     opParam = new ExpandoObject();
                     opParam.name = parameter.Name;
-                    opParam.@in = "path";
+                    opParam.@in = route.Contains($"{{{parameter.Name}}}") ? "path" : "query";
                     opParam.required = true;
                     SetParameterType(parameter.PropertyType, opParam, null);
                     parameterSignatures.Add(opParam);

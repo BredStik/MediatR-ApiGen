@@ -15,5 +15,7 @@ module MediatRMiddlewareTest {
         public username: string = null;
         // PASSWORD
         public password: string = null;
+        // GRANT_TYPE
+        public grant_Type: string = null;
     }
 }
