@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MediatRMiddlewareTest.Queries
 {
-    [Route("api/queries/getNames", "GET")]
+    //[Route("api/queries/getNames", "GET")]
     public class GetNamesQuery: IRequest<IEnumerable<string>>
     {
         public int MaxItems { get; set; }

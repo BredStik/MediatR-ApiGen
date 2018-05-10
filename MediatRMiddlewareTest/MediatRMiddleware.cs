@@ -121,11 +121,16 @@ namespace MediatRMiddlewareTest
             return builder.UseMiddleware<MediatRMiddleware>(routeBuilder);
         }
 
-        public static IApplicationBuilder ConfigureMediatRRoutes(this IApplicationBuilder builder, IRouteBuilder routeBuilder)
+        public static IApplicationBuilder ConfigureMediatRRoutes(this IApplicationBuilder builder, IRouteBuilder routeBuilder, params RouteAttribute[] routeAttributes)
         {
-            var routeAttributes = Assembly.GetAssembly(typeof(MediatRMiddleware)).GetTypes().Where(t => t.GetCustomAttribute<RouteAttribute>() != null).Select(t => new { Type = t, RouteAttribute = t.GetCustomAttribute<RouteAttribute>() });
+            var routeTypeAttributes = Assembly.GetAssembly(typeof(MediatRMiddleware)).GetTypes().Where(t => t.GetCustomAttribute<RouteAttribute>() != null).Select(t => new { Type = t, RouteAttribute = t.GetCustomAttribute<RouteAttribute>() });
 
-            foreach (var routeAttribute in routeAttributes)
+            if(routeAttributes != null)
+            {
+                routeTypeAttributes = routeTypeAttributes.Concat(routeAttributes.Select(r => new { Type = r.RequestType, RouteAttribute = r }));
+            }
+
+            foreach (var routeAttribute in routeTypeAttributes)
             {
                 routeBuilder.MapVerb(routeAttribute.RouteAttribute.HttpMethod, routeAttribute.RouteAttribute.Route, async (request, response, routeData) => {
                     var mediator = request.HttpContext.RequestServices.GetService(typeof(IMediator)) as IMediator;
