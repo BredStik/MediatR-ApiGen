@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using MediatRMiddlewareTest.Extensions;
+using MediatRMiddlewareTest.Queries;
 using MediatRMiddlewareTest.ResponseHttpConverters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -88,7 +90,8 @@ namespace MediatRMiddlewareTest
 
 
             var routeBuilder = new RouteBuilder(app);
-
+            routeBuilder.MapGet("", async (request, response, routeData) => { await response.WriteAsync("This is home!").ConfigureAwait(false); });
+            routeBuilder.MagGet<GetNamesQuery>("api/queries/getNames");
 
             //app.UseMediatRMiddleware(routeBuilder);
             app.ConfigureMediatRRoutes(routeBuilder);
@@ -97,13 +100,13 @@ namespace MediatRMiddlewareTest
         }
     }
 
-    public static class Extensions
-    {
-        public static IEnumerable<object> GetRequiredServices(this IServiceProvider provider, Type serviceType)
-        {
-            return (IEnumerable<object>)provider.GetRequiredService(typeof(IEnumerable<>).MakeGenericType(serviceType));
-        }
-    }
+    //public static class Extensions
+    //{
+    //    public static IEnumerable<object> GetRequiredServices(this IServiceProvider provider, Type serviceType)
+    //    {
+    //        return (IEnumerable<object>)provider.GetRequiredService(typeof(IEnumerable<>).MakeGenericType(serviceType));
+    //    }
+    //}
 
     public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
@@ -161,6 +164,24 @@ namespace MediatRMiddlewareTest
 
         protected UnauthorizedAccessException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : base(info, context)
         {
+        }
+    }
+
+    public static class MediatRRouteBuilder
+    {
+        public static RouteAttribute Post<TRequest>(string template) where TRequest : IBaseRequest
+        {
+            return Build<TRequest>(template, "Post");
+        }
+
+        public static RouteAttribute Get<TRequest>(string template) where TRequest : IBaseRequest
+        {
+            return Build<TRequest>(template, "Get");
+        }
+
+        private static RouteAttribute Build<TRequest>(string template, string httpMethod)
+        {
+            return new RouteAttribute(template, httpMethod) { RequestType = typeof(TRequest) };
         }
     }
 }

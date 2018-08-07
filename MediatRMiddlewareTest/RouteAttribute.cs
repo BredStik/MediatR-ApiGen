@@ -8,6 +8,7 @@ namespace MediatRMiddlewareTest
     {
         public string Route { get; set; }
         public string HttpMethod { get; set; }
+        public Type RequestType { get; set; }
 
         public RouteAttribute(string route, string httpMethod)
         {
