@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using MediatRMiddlewareTest.ResponseHttpConverters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -53,6 +54,9 @@ namespace MediatRMiddlewareTest
                 .AddJsonFormatters()
                 .AddAuthorization();
 
+            services.TryAddSingleton(typeof(IResponseHttpConverter<>), typeof(DefaultResponseHttpConverter<>));
+            services.TryAddSingleton(typeof(IResponseHttpConverter<string[]>), typeof(StringEnumHttpConverter));
+
             services.AddMediatR(GetType());
 
             services.AddSwaggerGen(c =>
@@ -79,7 +83,7 @@ namespace MediatRMiddlewareTest
             app.UseStaticFiles();
             app.UseMiddleware<SwaggerDefinitionMiddleware>();
             app.UseSwagger();
-            app.UseSwaggerUI(opt => { opt.SwaggerEndpoint("/api/swagger", "Mediatr API"); opt.InjectOnCompleteJavaScript("js/CustomSwagger.js"); });
+            app.UseSwaggerUI(opt => { opt.SwaggerEndpoint("/api/swagger", "Mediatr API"); opt.InjectJavascript ("js/CustomSwagger.js"); });
             app.UseAuthentication();
 
 

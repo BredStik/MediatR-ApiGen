@@ -9,3 +9,14 @@ C:\Users\mlafontaine\Documents\Visual Studio 2017\Projects\MediatRMiddlewareTest
 C:\Users\mlafontaine\Documents\Visual Studio 2017\Projects\MediatRMiddlewareTest\MediatRMiddlewareTest\obj\Debug\netcoreapp2.0\MediatRMiddlewareTest.AssemblyInfo.cs
 C:\Users\mlafontaine\Documents\Visual Studio 2017\Projects\MediatRMiddlewareTest\MediatRMiddlewareTest\obj\Debug\netcoreapp2.0\MediatRMiddlewareTest.dll
 C:\Users\mlafontaine\Documents\Visual Studio 2017\Projects\MediatRMiddlewareTest\MediatRMiddlewareTest\obj\Debug\netcoreapp2.0\MediatRMiddlewareTest.pdb
+D:\git\MediatR-ApiGen\MediatRMiddlewareTest\bin\Debug\netcoreapp2.0\MediatRMiddlewareTest.deps.json
+D:\git\MediatR-ApiGen\MediatRMiddlewareTest\bin\Debug\netcoreapp2.0\MediatRMiddlewareTest.runtimeconfig.json
+D:\git\MediatR-ApiGen\MediatRMiddlewareTest\bin\Debug\netcoreapp2.0\MediatRMiddlewareTest.runtimeconfig.dev.json
+D:\git\MediatR-ApiGen\MediatRMiddlewareTest\bin\Debug\netcoreapp2.0\MediatRMiddlewareTest.dll
+D:\git\MediatR-ApiGen\MediatRMiddlewareTest\bin\Debug\netcoreapp2.0\MediatRMiddlewareTest.pdb
+D:\git\MediatR-ApiGen\MediatRMiddlewareTest\obj\Debug\netcoreapp2.0\MediatRMiddlewareTest.csproj.CoreCompileInputs.cache
+D:\git\MediatR-ApiGen\MediatRMiddlewareTest\obj\Debug\netcoreapp2.0\MediatRMiddlewareTest.AssemblyInfoInputs.cache
+D:\git\MediatR-ApiGen\MediatRMiddlewareTest\obj\Debug\netcoreapp2.0\MediatRMiddlewareTest.AssemblyInfo.cs
+D:\git\MediatR-ApiGen\MediatRMiddlewareTest\obj\Debug\netcoreapp2.0\MediatRMiddlewareTest.dll
+D:\git\MediatR-ApiGen\MediatRMiddlewareTest\obj\Debug\netcoreapp2.0\MediatRMiddlewareTest.pdb
+D:\git\MediatR-ApiGen\MediatRMiddlewareTest\obj\Debug\netcoreapp2.0\MediatRMiddlewareTest.csprojAssemblyReference.cache

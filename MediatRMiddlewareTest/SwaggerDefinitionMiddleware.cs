@@ -254,6 +254,11 @@ namespace MediatRMiddlewareTest
                 }
             }
 
+            if(httpMethod.Equals(HttpMethods.Get, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return parameterSignatures;
+            }
+
             opParam = new ExpandoObject();
             opParam.name = requestType.Name;
             opParam.@in = "body";

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using MediatRMiddlewareTest.Commands;
+using MediatRMiddlewareTest.ResponseHttpConverters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -156,15 +157,20 @@ namespace MediatRMiddlewareTest
 
                             prop?.SetValue(mediatrRequest, JsonConvert.DeserializeObject(JsonConvert.SerializeObject(value.Value), prop.PropertyType));
                         }
-                    }
-                                        
+                    }                                        
 
                     var mediatorResponse = await mediator.Send(mediatrRequest).ConfigureAwait(false);
-                    string jsonResponse = JsonConvert.SerializeObject(mediatorResponse);
 
-                    response.ContentType = "application/json";
+                    //var converters = request.HttpContext.RequestServices.GetRequiredServices(typeof(IResponseHttpConverter<>));
+                    dynamic converter = request.HttpContext.RequestServices.GetService(typeof(IResponseHttpConverter<>).MakeGenericType(mediatorResponse.GetType()));
 
-                    await response.WriteAsync(jsonResponse).ConfigureAwait(false);
+                    await converter.Convert(mediatorResponse, response);
+
+                    //string jsonResponse = JsonConvert.SerializeObject(mediatorResponse);
+                    //
+                    //response.ContentType = "application/json";
+                    //
+                    //await response.WriteAsync(jsonResponse).ConfigureAwait(false);
                 });
             }
 
